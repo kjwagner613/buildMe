@@ -8,7 +8,7 @@ document.getElementById('generateBtn').addEventListener('click', async () => {
     const response = await fetch('/.netlify/functions/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, tone: styleInput, scene, dialogue, styleInput })
+      body: JSON.stringify({ prompt, scene, dialogue, styleInput, tone: styleInput })
     });
 
     const data = await response.json();
