@@ -1,29 +1,22 @@
-document.getElementById('generateBtn').addEventListener('click', () => {
+document.getElementById('generateBtn').addEventListener('click', async () => {
   const prompt = document.getElementById('prompt').value;
   const scene = document.getElementById('scene').value;
   const dialogue = document.getElementById('dialogue').value;
-  const style = document.getElementById('style').value;
+  const styleInput = document.getElementById('style').value;
 
-  const output = `
-🧵 Prompt:
-${prompt}
+  try {
+    const response = await fetch('/.netlify/functions/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, tone: styleInput, scene, dialogue, styleInput })
+    });
 
-🎬 Scene:
-${scene}
+    const data = await response.json();
+    const story = data.text || '⚠️ No response from model.';
 
-🗣️ Dialogue:
-${dialogue}
-
-✍️ Style Notes:
-${style}
-
-📘 Final Chapter:
-${scene}
-
-${dialogue}
-
-*Stylistic Tone: ${style}*
-  `;
-  
-  document.getElementById('output').textContent = output;
+    document.getElementById('output').textContent = story;
+  } catch (err) {
+    document.getElementById('output').textContent = '🔥 Something went wrong.';
+    console.error('🧨 Form submission error:', err);
+  }
 });
